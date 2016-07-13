@@ -1,0 +1,15 @@
+{
+  "login": {
+    "leLoginTimeout": 5
+  },
+  "ams": {
+    "domain": "qatrunk.dev.lprnd.net"
+  },
+  "csds": {
+    "domain": "hc1n.dev.lprnd.net",
+    "ttl": 3600000,
+    "queuePerSite": 10,
+    "interval": 60000
+  }
+
+}
