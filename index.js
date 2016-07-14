@@ -9,7 +9,7 @@ var util = require('util');
 var SocketProtocol = require('./lib/ams/socket-protocol');
 
 
-class AgentSDK extends EventEmitter { // todo monitor the socket
+class AgentSDK extends EventEmitter { // todo monitor the socket,
     constructor(brandid, key, secret, lastUpdateTime) {
         // init brand-ws, subscribeEx
         // register, receive
@@ -19,10 +19,10 @@ class AgentSDK extends EventEmitter { // todo monitor the socket
         this.secret = secret;
 
         this.sp = new SocketProtocol(brandid, key, secret, 'wss://qatrunk.dev.lprnd.net',
-                'https://hc/s-qa51953286/web/m-LP/mlogin/home.jsp', 'https://qtvr-wap08.dev.lprnd.net/le/account/qa51953286/session');
+                'https://hc1.dev.lprnd.net/hc/s-qa6573138/web/m-LP/mlogin/home.jsp', 'https://qtvr-wap08.dev.lprnd.net/le/account/qa6573138/session');
 
         this.sp.on('error', err => {
-           // TODO: ...
+           // TODO: ... reopen ws if
         });
 
         this.sp.on('ws::connect', () =>  {
@@ -95,7 +95,8 @@ class AgentSDK extends EventEmitter { // todo monitor the socket
 }
 /// https://hc/s-qa51953286/web/m-LP/mlogin/home.jsp
 //  https://qtvr-wap08.dev.lprnd.net/le/account/qa51953286/session
-let as = new AgentSDK('qa51953286', 'tester@lp.com', '12345678', Date.now());
+let as = new AgentSDK('qa6573138', 'bot@liveperson.com', '12345678', Date.now());
+//let as = new AgentSDK('qa6573138', 'bot@liveperson.com', 'zeroplease2014!', Date.now());
 
 
 module.exports = AgentSDK;
