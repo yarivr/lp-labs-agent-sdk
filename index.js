@@ -3,11 +3,14 @@
  */
 "use strict";
 
+var _ = require('lodash');
 let EventEmitter = require('events');
 let util = require('util');
 
 let SocketProtocol = require('./lib/ams/socket-protocol');
 let SubscribeExConversations = require('./lib/ams/v2/SubscribeExConversations');
+let AcceptRing = require('./lib/ams/v2/AcceptRing');
+let AmsEvent = require('./lib/ams/ams-event');
 
 
 class AgentSDK extends EventEmitter { // todo monitor the socket,
@@ -20,34 +23,48 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
         this.secret = secret;
         this.lastUpdateTime = lastUpdateTime;
 
-        this.sp = new SocketProtocol(brandid, key, secret, 'wss://qatrunk.dev.lprnd.net',
+        let createSocket = () => {
+            this.sp = new SocketProtocol(brandid, key, secret, 'wss://qatrunk.dev.lprnd.net',
                 'https://hc1.dev.lprnd.net/hc/s-qa6573138/web/m-LP/mlogin/home.jsp', 'https://qtvr-wap08.dev.lprnd.net/le/account/qa6573138/session');
 
-        this.sp.on('error', err => {
-           // TODO: ... reopen ws if
-        });
-
-        this.sp.on('ws::connect', () =>  {
-            // in case of error close and re-create
-            //subscribeExConversations()
-            let subscribeExReq = new SubscribeExConversations({brandId: this.brandid, minLastUpdatedTime: this.lastUpdateTime });
-            this.sp.send(subscribeExReq.getType(), subscribeExReq.getRequest()).catch((err) => {
-                // TODO:
+            this.sp.on('error', err => {
+                // TODO: ... reopen ws if
             });
 
-            /*
-             Consumer -> Agent
-             */
-            this.sp.on('ams::data', data => {
-                console.log(">>data:", data);
-                var amsEvent = new AmsEvent(data);
-                this.emit(amsEvent.type, amsEvent.data); // consumer::ring, consumer::msg, consumer::accept, consumer::seen, consumer::compose, consumer::close
-                // TODO: update lastUpdateTime
+            this.sp.on('ws::connect', () =>  {
+                // in case of error close and re-create
+                //subscribeExConversations()
+                let subscribeExReq = new SubscribeExConversations({brandId: this.brandid, minLastUpdatedTime: this.lastUpdateTime });
+                this.sp.send(subscribeExReq.getType(), subscribeExReq.getRequest()).catch((err) => {
+                    this.sp.close();
+                });
+
+                /*
+                 Consumer -> Agent
+                 */
+                this.sp.on('ams::data', data => { // consumer::ring, consumer::msg, consumer::accept, consumer::seen, consumer::compose, consumer::close
+                    console.log(">>>GOT From AMS: ", data);
+
+                    if (_.has(data, 'body.changes')) {
+                        data.body.changes.forEach(change => {
+                           var event = new AmsEvent(change);
+                           if (event) {
+                               this.emit(event.getType(), event.getData());
+                           }
+                        });
+                    }
+                    else {
+                        var event = new AmsEvent(data);
+                        var type = event.getType();
+                        if (type) {
+                            this.emit(type, event.getData());
+                        }
+                    }
+                });
             });
+        };
 
-        });
-
-
+        createSocket();
     }
 
     /*
@@ -55,8 +72,11 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
      */
 
 
-    acceptRing() {
-
+    acceptRing(ringId) {
+        let acceptRingReq = new AcceptRing({brandId: this.brandid, ringId: ringId });
+        return this.sp.send(acceptRingReq.getType(), acceptRingReq.getRequest()).catch((err) => {
+            console.log(">>>Failed to accept ring");
+        });
     }
 
     getUserProfile() {
@@ -105,6 +125,16 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
 /// https://hc/s-qa51953286/web/m-LP/mlogin/home.jsp
 //  https://qtvr-wap08.dev.lprnd.net/le/account/qa51953286/session
 let as = new AgentSDK('qa6573138', 'bot@liveperson.com', '12345678', Date.now());
+as.on('consumer::ring', (data) => {
+    console.log(">>>CONSUMER Ringing: ", data);
+    as.acceptRing(data.ringId);
+
+});
+
+as.on('consumer::contentEvent', (data) => {
+    console.log(">>>GOT Message from consumer: ", data);
+});
+
 //let as = new AgentSDK('qa6573138', 'bot@liveperson.com', 'zeroplease2014!', Date.now());
 
 
