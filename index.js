@@ -3,10 +3,11 @@
  */
 "use strict";
 
-var EventEmitter = require('events');
-var util = require('util');
+let EventEmitter = require('events');
+let util = require('util');
 
-var SocketProtocol = require('./lib/ams/socket-protocol');
+let SocketProtocol = require('./lib/ams/socket-protocol');
+let SubscribeExConversations = require('./lib/ams/v2/SubscribeExConversations');
 
 
 class AgentSDK extends EventEmitter { // todo monitor the socket,
@@ -17,6 +18,7 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
         this.brandid = brandid;
         this.key = key;
         this.secret = secret;
+        this.lastUpdateTime = lastUpdateTime;
 
         this.sp = new SocketProtocol(brandid, key, secret, 'wss://qatrunk.dev.lprnd.net',
                 'https://hc1.dev.lprnd.net/hc/s-qa6573138/web/m-LP/mlogin/home.jsp', 'https://qtvr-wap08.dev.lprnd.net/le/account/qa6573138/session');
@@ -28,12 +30,19 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
         this.sp.on('ws::connect', () =>  {
             // in case of error close and re-create
             //subscribeExConversations()
+            let subscribeExReq = new SubscribeExConversations({brandId: this.brandid, minLastUpdatedTime: this.lastUpdateTime });
+            this.sp.send(subscribeExReq.getType(), subscribeExReq.getRequest()).catch((err) => {
+                // TODO:
+            });
+
             /*
              Consumer -> Agent
              */
             this.sp.on('ams::data', data => {
+                console.log(">>data:", data);
                 var amsEvent = new AmsEvent(data);
                 this.emit(amsEvent.type, amsEvent.data); // consumer::ring, consumer::msg, consumer::accept, consumer::seen, consumer::compose, consumer::close
+                // TODO: update lastUpdateTime
             });
 
         });
