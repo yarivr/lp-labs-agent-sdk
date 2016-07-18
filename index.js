@@ -10,7 +10,8 @@ let util = require('util');
 let SocketProtocol = require('./lib/ams/socket-protocol');
 let SubscribeExConversations = require('./lib/ams/v2/SubscribeExConversations');
 let AcceptRing = require('./lib/ams/v2/AcceptRing');
-let AmsEvent = require('./lib/ams/ams-event');
+//let AmsEvent = require('./lib/ams/ams-event');
+let amsEmit =  require('./lib/ams/ams-emit');
 
 
 class AgentSDK extends EventEmitter { // todo monitor the socket,
@@ -44,22 +45,7 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
                  */
                 this.sp.on('ams::data', data => { // consumer::ring, consumer::msg, consumer::accept, consumer::seen, consumer::compose, consumer::close
                     console.log(">>>GOT From AMS: ", data);
-
-                    if (_.has(data, 'body.changes')) {
-                        data.body.changes.forEach(change => {
-                           var event = new AmsEvent(change);
-                           if (event) {
-                               this.emit(event.getType(), event.getData());
-                           }
-                        });
-                    }
-                    else {
-                        var event = new AmsEvent(data);
-                        var type = event.getType();
-                        if (type) {
-                            this.emit(type, event.getData());
-                        }
-                    }
+                    amsEmit(data, this);
                 });
             });
         };
