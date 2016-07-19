@@ -8,6 +8,7 @@ let EventEmitter = require('events');
 let util = require('util');
 
 let SocketProtocol = require('./lib/ams/socket-protocol');
+let GetUserProfile = require('./lib/ams/v2/GetUserProfile');
 let SubscribeExConversations = require('./lib/ams/v2/SubscribeExConversations');
 let AcceptRing = require('./lib/ams/v2/AcceptRing');
 //let AmsEvent = require('./lib/ams/ams-event');
@@ -23,6 +24,7 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
         this.key = key;
         this.secret = secret;
         this.lastUpdateTime = lastUpdateTime;
+        this.userId = undefined;
 
         let createSocket = () => {
             this.sp = new SocketProtocol(brandid, key, secret, 'wss://qatrunk.dev.lprnd.net',
@@ -32,20 +34,41 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
                 // TODO: ... reopen ws if
             });
 
+            let getUid = () => {
+                if (this.userId) {
+                    Promise.resolve(this.userId);
+                }
+                else {
+                    return this.sp.send('.ams.userprofile.GetUserProfile', { userId: "" }).then(agentProfile =>  {
+                        this.userId = agentProfile.userId;
+                        return this.userId;
+                    });
+                }
+            };
+
             this.sp.on('ws::connect', () =>  {
                 // in case of error close and re-create
                 //subscribeExConversations()
-                let subscribeExReq = new SubscribeExConversations({brandId: this.brandid, minLastUpdatedTime: this.lastUpdateTime });
-                this.sp.send(subscribeExReq.getType(), subscribeExReq.getRequest()).catch((err) => {
-                    this.sp.close();
-                });
+                let getUserProfileReq
+                getUid().then(userId =>  {
 
-                /*
-                 Consumer -> Agent
-                 */
-                this.sp.on('ams::data', data => { // consumer::ring, consumer::msg, consumer::accept, consumer::seen, consumer::compose, consumer::close
-                    console.log(">>>GOT From AMS: ", data);
-                    amsEmit(data, this);
+                    let subscribeExReq = new SubscribeExConversations({
+                        brandId: this.brandid,
+                        minLastUpdatedTime: this.lastUpdateTime,
+                        userId: userId
+                    });
+                    this.sp.send(subscribeExReq.getType(), subscribeExReq.getRequest()).catch((err) => {
+                        this.sp.close();
+                    });
+
+                    /*
+                     Consumer -> Agent
+                     */
+                    this.sp.on('ams::data', data => { // consumer::ring, consumer::msg, consumer::accept, consumer::seen, consumer::compose, consumer::close
+                        console.log(">>>GOT From AMS: ", data);
+                        amsEmit(data, this);
+                    });
+
                 });
             });
         };
@@ -69,10 +92,18 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
 
     }
 
-    publishEvent() { // text, hosted file, external-link
+    sendText(convId, msg) { // text, hosted file, external-link
+
 
     }
 
+    sendFile() {
+
+    }
+
+    sendLinkFile() {
+
+    }
 
     closeConversation() {
 
@@ -119,6 +150,8 @@ as.on('consumer::ring', (data) => {
 
 as.on('consumer::contentEvent', (data) => {
     console.log(">>>GOT Message from consumer: ", data);
+    console.log(">>>Echo to consumer");
+    as.publishEvent()
 });
 
 //let as = new AgentSDK('qa6573138', 'bot@liveperson.com', 'zeroplease2014!', Date.now());
