@@ -11,6 +11,7 @@ let SocketProtocol = require('./lib/ams/socket-protocol');
 let GetUserProfile = require('./lib/ams/v2/GetUserProfile');
 let SubscribeExConversations = require('./lib/ams/v2/SubscribeExConversations');
 let AcceptRing = require('./lib/ams/v2/AcceptRing');
+let PublishEvent = require('./lib/ams/v2/PublishEvent');
 //let AmsEvent = require('./lib/ams/ams-event');
 let amsEmit =  require('./lib/ams/ams-emit');
 
@@ -92,9 +93,11 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
 
     }
 
-    sendText(convId, msg) { // text, hosted file, external-link
-
-
+    sendText(convId, message) { // text, hosted file, external-link
+        let publishEventReq = new PublishEvent({convId: convId, message: message});
+        return this.sp.send(publishEventReq.getType(), publishEventReq.getRequest()).catch((err) => {
+            console.log(">>>Failed to echo message");
+        });
     }
 
     sendFile() {
@@ -151,7 +154,7 @@ as.on('consumer::ring', (data) => {
 as.on('consumer::contentEvent', (data) => {
     console.log(">>>GOT Message from consumer: ", data);
     console.log(">>>Echo to consumer");
-    as.publishEvent()
+    as.sendText(data.convId, "[echo]: " + data.message)
 });
 
 //let as = new AgentSDK('qa6573138', 'bot@liveperson.com', 'zeroplease2014!', Date.now());
