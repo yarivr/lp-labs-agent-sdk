@@ -7,21 +7,21 @@ var _ = require('lodash');
 let EventEmitter = require('events');
 let util = require('util');
 
+let config = require('./conf/config');
 let SocketProtocol = require('./lib/ams/socket-protocol');
 let GetUserProfile = require('./lib/ams/v2/GetUserProfile');
 let SubscribeExConversations = require('./lib/ams/v2/SubscribeExConversations');
 let AcceptRing = require('./lib/ams/v2/AcceptRing');
 let PublishEvent = require('./lib/ams/v2/PublishEvent');
-//let AmsEvent = require('./lib/ams/ams-event');
 let amsEmit =  require('./lib/ams/ams-emit');
 
 
 class AgentSDK extends EventEmitter { // todo monitor the socket,
-    constructor(brandid, key, secret, lastUpdateTime, amsUrl, adminAreaUrl, liveEngageUrl) {
+    constructor(brandid, key, secret, lastUpdateTime, amsDomain, adminAreaUrl, liveEngageUrl) {
         // init brand-ws, subscribeEx
         // register, receive
         super();
-        this.amsUrl = amsUrl;
+        this.amsUrl = 'wss://' +  amsDomain;
         this.adminAreaUrl = adminAreaUrl,
         this.liveEngageUrl = liveEngageUrl,
 
@@ -87,20 +87,17 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
 
     acceptRing(ringId) {
         let acceptRingReq = new AcceptRing({brandId: this.brandid, ringId: ringId });
-        return this.sp.send(acceptRingReq.getType(), acceptRingReq.getRequest()).catch((err) => {
-            console.log(">>>Failed to accept ring");
-        });
+        return this.sp.send(acceptRingReq.getType(), acceptRingReq.getRequest());
     }
 
-    getUserProfile() {
-
+    getUserProfile(userId) {
+        let userProfileReq = new GetUserProfile({ userId: userId });
+        return this.sp.send(userProfileReq.getType(), userProfileReq.getRequest());
     }
 
     sendText(convId, message) { // text, hosted file, external-link
         let publishEventReq = new PublishEvent({convId: convId, message: message});
-        return this.sp.send(publishEventReq.getType(), publishEventReq.getRequest()).catch((err) => {
-            console.log(">>>Failed to echo message");
-        });
+        return this.sp.send(publishEventReq.getType(), publishEventReq.getRequest());
     }
 
     sendFile() {
@@ -145,20 +142,5 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
     }
 
 }
-/// https://hc/s-qa51953286/web/m-LP/mlogin/home.jsp
-//  https://qtvr-wap08.dev.lprnd.net/le/account/qa51953286/session
-let as = new AgentSDK('qa6573138', 'bot@liveperson.com', '12345678', Date.now(), 'wss://qatrunk.dev.lprnd.net',
-        'https://hc1.dev.lprnd.net/hc/s-qa6573138/web/m-LP/mlogin/home.jsp', 'https://qtvr-wap08.dev.lprnd.net/le/account/qa6573138/session');
-as.on('consumer::ring', (data) => {
-    console.log(">>>CONSUMER Ringing: ", data);
-    as.acceptRing(data.ringId);
-
-});
-
-as.on('consumer::contentEvent', (data) => {
-    console.log(">>>GOT Message from consumer: ", data);
-    console.log(">>>Echo to consumer");
-    as.sendText(data.convId, "[echo]: " + data.message);
-});
 
 module.exports = AgentSDK;

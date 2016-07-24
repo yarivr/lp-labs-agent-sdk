@@ -1,15 +1,11 @@
 {
   "login": {
-    "leLoginTimeout": 5
+    "leLoginTimeout": 5,
+    "tokenUrl": "https://hc1.dev.lprnd.net/hc/s-qa6573138/web/m-LP/mlogin/home.jsp",
+    "loginUrl": "https://qtvr-wap08.dev.lprnd.net/le/account/qa6573138/session"
   },
   "ams": {
     "domain": "qatrunk.dev.lprnd.net"
-  },
-  "csds": {
-    "domain": "hc1n.dev.lprnd.net",
-    "ttl": 3600000,
-    "queuePerSite": 10,
-    "interval": 60000
   }
 
 }
