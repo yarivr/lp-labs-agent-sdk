@@ -17,6 +17,10 @@
     "promise.prototype.finally": "1.0.1",
     "request": "^2.73.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://lpgithub.dev.lprnd.net/labs/agent-sdk"
+  },
   "keywords": [
     "bot",
     "ums",

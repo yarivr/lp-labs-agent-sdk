@@ -8,6 +8,7 @@ let EventEmitter = require('events');
 let util = require('util');
 
 let config = require('./conf/config');
+let lpCSDS = require('./lib/lp-csds');
 let SocketProtocol = require('./lib/ams/socket-protocol');
 let GetUserProfile = require('./lib/ams/v2/GetUserProfile');
 let SubscribeExConversations = require('./lib/ams/v2/SubscribeExConversations');
@@ -17,67 +18,68 @@ let amsEmit =  require('./lib/ams/ams-emit');
 
 
 class AgentSDK extends EventEmitter { // todo monitor the socket,
-    constructor(brandid, key, secret, lastUpdateTime, amsDomain, adminAreaUrl, liveEngageUrl) {
+    constructor(brandid, key, secret, lastUpdateTime) {
         // init brand-ws, subscribeEx
         // register, receive
         super();
-        this.amsUrl = 'wss://' +  amsDomain;
-        this.adminAreaUrl = adminAreaUrl,
-        this.liveEngageUrl = liveEngageUrl,
+        lpCSDS.getServices(brandid).then(services => {
+            this.amsUrl = services.asyncMessagingEnt;
+            this.adminAreaUrl = services.adminAreaUrl;
+            this.liveEngageUrl = services.liveEngageUrl;
+            this.brandid = brandid;
+            this.key = key;
+            this.secret = secret;
+            this.lastUpdateTime = lastUpdateTime;
+            this.userId = undefined;
 
-        this.brandid = brandid;
-        this.key = key;
-        this.secret = secret;
-        this.lastUpdateTime = lastUpdateTime;
-        this.userId = undefined;
+            let createSocket = () => {
+                this.sp = new SocketProtocol(brandid, key, secret, this.amsUrl, this.adminAreaUrl, this.liveEngageUrl);
 
-        let createSocket = () => {
-            this.sp = new SocketProtocol(brandid, key, secret, this.amsUrl, this.adminAreaUrl, this.liveEngageUrl);
+                this.sp.on('error', err => {
+                    // TODO: ... reopen ws if
+                });
 
-            this.sp.on('error', err => {
-                // TODO: ... reopen ws if
-            });
+                let getUid = () => {
+                    if (this.userId) {
+                        Promise.resolve(this.userId);
+                    }
+                    else {
+                        return this.sp.send('.ams.userprofile.GetUserProfile', {userId: ""}).then(agentProfile => {
+                            this.userId = agentProfile.userId;
+                            return this.userId;
+                        });
+                    }
+                };
 
-            let getUid = () => {
-                if (this.userId) {
-                    Promise.resolve(this.userId);
-                }
-                else {
-                    return this.sp.send('.ams.userprofile.GetUserProfile', { userId: "" }).then(agentProfile =>  {
-                        this.userId = agentProfile.userId;
-                        return this.userId;
+                this.sp.on('ws::connect', () => {
+                    // in case of error close and re-create
+                    //subscribeExConversations()
+                    let getUserProfileReq
+                    getUid().then(userId => {
+
+                        let subscribeExReq = new SubscribeExConversations({
+                            brandId: this.brandid,
+                            minLastUpdatedTime: this.lastUpdateTime,
+                            userId: userId
+                        });
+                        this.sp.send(subscribeExReq.getType(), subscribeExReq.getRequest()).catch((err) => {
+                            this.sp.close();
+                        });
+
+                        /*
+                         Consumer -> Agent
+                         */
+                        this.sp.on('ams::data', data => { // consumer::ring, consumer::msg, consumer::accept, consumer::seen, consumer::compose, consumer::close
+                            console.log(">>>GOT From AMS: ", data);
+                            amsEmit(data, this);
+                        });
+
                     });
-                }
+                });
             };
 
-            this.sp.on('ws::connect', () =>  {
-                // in case of error close and re-create
-                //subscribeExConversations()
-                let getUserProfileReq
-                getUid().then(userId =>  {
-
-                    let subscribeExReq = new SubscribeExConversations({
-                        brandId: this.brandid,
-                        minLastUpdatedTime: this.lastUpdateTime,
-                        userId: userId
-                    });
-                    this.sp.send(subscribeExReq.getType(), subscribeExReq.getRequest()).catch((err) => {
-                        this.sp.close();
-                    });
-
-                    /*
-                     Consumer -> Agent
-                     */
-                    this.sp.on('ams::data', data => { // consumer::ring, consumer::msg, consumer::accept, consumer::seen, consumer::compose, consumer::close
-                        console.log(">>>GOT From AMS: ", data);
-                        amsEmit(data, this);
-                    });
-
-                });
-            });
-        };
-
-        createSocket();
+            createSocket();
+        });
     }
 
     /*
@@ -112,6 +114,12 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
 
     }
 
+    transferToSkill() {
+
+    }
+
+
+    // TBD - START
     resumeConversation() {
 
     }
@@ -140,6 +148,7 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
     generateURLForDownloadFile() {
 
     }
+    // TBD - END
 
 }
 

@@ -1,11 +1,9 @@
 {
   "login": {
-    "leLoginTimeout": 5,
-    "tokenUrl": "https://hc1.dev.lprnd.net/hc/s-qa6573138/web/m-LP/mlogin/home.jsp",
-    "loginUrl": "https://qtvr-wap08.dev.lprnd.net/le/account/qa6573138/session"
+    "leLoginTimeout": 5
   },
-  "ams": {
-    "domain": "qatrunk.dev.lprnd.net"
+  "csds": {
+    "prodDomain": "http://adminlogin.liveperson.net/",
+    "devDomain": "192.168.21.129"
   }
-
 }
