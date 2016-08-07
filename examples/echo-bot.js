@@ -26,5 +26,10 @@ as.on('consumer::ring', data => {
 as.on('consumer::contentEvent', data => {
     console.log(">>>GOT Message from consumer: ", data);
     console.log(">>>Echo to consumer");
-    as.sendText(data.convId, "[echo]: " + data.message);
+    if (data.message.indexOf('transfer') == 0) {
+        as.transferToSkill(data.convId, 3617806910);
+    }
+    else {
+        as.sendText(data.convId, "[echo]: " + data.message);
+    }
 });
