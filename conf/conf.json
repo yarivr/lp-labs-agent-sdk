@@ -3,7 +3,7 @@
     "leLoginTimeout": 5
   },
   "csds": {
-    "prodDomain": "http://adminlogin.liveperson.net/",
+    "prodDomain": "adminlogin.liveperson.net",
     "devDomain": "192.168.21.129"
   }
 }
