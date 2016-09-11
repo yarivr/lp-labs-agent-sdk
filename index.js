@@ -42,7 +42,7 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
 
                 let getUid = () => {
                     if (this.userId) {
-                        Promise.resolve(this.userId);
+                        return Promise.resolve(this.userId);
                     }
                     else {
                         return this.sp.send('.ams.userprofile.GetUserProfile', {userId: ""}).then(agentProfile => {
