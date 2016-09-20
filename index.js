@@ -15,6 +15,7 @@ let SubscribeExConversations = require('./lib/ams/v2/SubscribeExConversations');
 let AcceptRing = require('./lib/ams/v2/AcceptRing');
 let PublishEvent = require('./lib/ams/v2/PublishEvent');
 let TransferToSkill = require('./lib/ams/v2/TransferToSkill');
+let ResolveConversation = require('./lib/ams/v2/ResolveConversation');
 let amsEmit =  require('./lib/ams/ams-emit');
 
 
@@ -111,8 +112,9 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
 
     }
 
-    resolveConversation() {
-
+    resolveConversation(convId) {
+        let resolveConvReq = new ResolveConversation({conversationId: convId});
+        return this.sp.send(resolveConvReq.getType(), resolveConvReq.getRequest());
     }
 
     transferToSkill(convId, skillId) {
