@@ -16,6 +16,8 @@ let AcceptRing = require('./lib/ams/v2/AcceptRing');
 let PublishEvent = require('./lib/ams/v2/PublishEvent');
 let TransferToSkill = require('./lib/ams/v2/TransferToSkill');
 let ResolveConversation = require('./lib/ams/v2/ResolveConversation');
+let ComposeEvent = require('./lib/ams/v2/ComposeEvent');
+let ActiveEvent = require('./lib/ams/v2/ActiveEvent');
 let amsEmit =  require('./lib/ams/ams-emit');
 
 
@@ -99,9 +101,19 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
         return this.sp.send(userProfileReq.getType(), userProfileReq.getRequest());
     }
 
-    sendText(convId, message) { // text, hosted file, external-link
-        let publishEventReq = new PublishEvent({convId: convId, message: message});
-        return this.sp.send(publishEventReq.getType(), publishEventReq.getRequest());
+    sendText(convId, message, composeTimeout) { // text, hosted file, external-link
+        let sp = this.sp;
+        let composeEventReq = new ComposeEvent({convId: convId});
+        return this.sp.send(composeEventReq.getType(), composeEventReq.getRequest()).then(() => {
+            let tmo = composeTimeout ? composeTimeout : 2000;
+            setTimeout(() => {
+                let activeEventReq = new ActiveEvent({convId: convId});
+                return sp.send(activeEventReq.getType(), activeEventReq.getRequest()).then(() => {
+                    let publishEventReq = new PublishEvent({convId: convId, message: message});
+                    return sp.send(publishEventReq.getType(), publishEventReq.getRequest());
+                });
+            }, tmo);
+        });
     }
 
     sendFile() {
