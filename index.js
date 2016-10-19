@@ -101,19 +101,31 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
         return this.sp.send(userProfileReq.getType(), userProfileReq.getRequest());
     }
 
-    sendText(convId, message, composeTimeout) { // text, hosted file, external-link
-        let sp = this.sp;
+    compose(convid) {
         let composeEventReq = new ComposeEvent({convId: convId});
-        return this.sp.send(composeEventReq.getType(), composeEventReq.getRequest()).then(() => {
-            let tmo = composeTimeout ? composeTimeout : 2000;
-            setTimeout(() => {
-                let activeEventReq = new ActiveEvent({convId: convId});
-                return sp.send(activeEventReq.getType(), activeEventReq.getRequest()).then(() => {
-                    let publishEventReq = new PublishEvent({convId: convId, message: message});
-                    return sp.send(publishEventReq.getType(), publishEventReq.getRequest());
-                });
-            }, tmo);
-        });
+        return this.sp.send(composeEventReq.getType(), composeEventReq.getRequest());
+    }
+
+    active(convid) {
+        let activeEventReq = new ActiveEvent({convId: convId});
+        return this.sp.send(activeEventReq.getType(), activeEventReq.getRequest());
+    }
+
+    sendText(convId, message, composeTimeout) { // text, hosted file, external-link
+        //let sp = this.sp;
+        //let composeEventReq = new ComposeEvent({convId: convId});
+        //return this.sp.send(composeEventReq.getType(), composeEventReq.getRequest()).then(() => {
+        //    let tmo = composeTimeout ? composeTimeout : 2000;
+        //    setTimeout(() => {
+        //        let activeEventReq = new ActiveEvent({convId: convId});
+        //        return sp.send(activeEventReq.getType(), activeEventReq.getRequest()).then(() => {
+        //            let publishEventReq = new PublishEvent({convId: convId, message: message});
+        //            return sp.send(publishEventReq.getType(), publishEventReq.getRequest());
+        //        });
+        //    }, tmo);
+        //});
+        let publishEventReq = new PublishEvent({convId: convId, message: message});
+        return this.sp.send(publishEventReq.getType(), publishEventReq.getRequest());
     }
 
     sendFile() {
