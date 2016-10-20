@@ -101,12 +101,12 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
         return this.sp.send(userProfileReq.getType(), userProfileReq.getRequest());
     }
 
-    compose(convid) {
+    compose(convId) {
         let composeEventReq = new ComposeEvent({convId: convId});
         return this.sp.send(composeEventReq.getType(), composeEventReq.getRequest());
     }
 
-    active(convid) {
+    active(convId) {
         let activeEventReq = new ActiveEvent({convId: convId});
         return this.sp.send(activeEventReq.getType(), activeEventReq.getRequest());
     }
