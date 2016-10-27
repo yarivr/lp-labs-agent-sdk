@@ -7,7 +7,7 @@ var _ = require('lodash');
 let EventEmitter = require('events');
 let util = require('util');
 
-let config = require('./conf/config');
+let config = require('./conf/conf.json');
 let lpCSDS = require('./lib/lp-csds');
 let SocketProtocol = require('./lib/ams/socket-protocol');
 let GetUserProfile = require('./lib/ams/v2/GetUserProfile');
@@ -19,12 +19,12 @@ let ResolveConversation = require('./lib/ams/v2/ResolveConversation');
 let ComposeEvent = require('./lib/ams/v2/ComposeEvent');
 let ActiveEvent = require('./lib/ams/v2/ActiveEvent');
 let amsEmit =  require('./lib/ams/ams-emit');
+let LoginError = require('./lib/errors').LoginError;
+let UMSError = require('./lib/errors').UMSError;
 
 
-class AgentSDK extends EventEmitter { // todo monitor the socket,
+class AgentSDK extends EventEmitter { // throws Error, UMSError, LoginError
     constructor(brandid, key, secret, lastUpdateTime) {
-        // init brand-ws, subscribeEx
-        // register, receive
         super();
         lpCSDS.getServices(brandid).then(services => {
             this.amsUrl = services.asyncMessagingEnt;
@@ -40,7 +40,13 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
                 this.sp = new SocketProtocol(brandid, key, secret, this.amsUrl, this.adminAreaUrl, this.liveEngageUrl);
 
                 this.sp.on('error', err => {
-                    // TODO: ... reopen ws if
+                    if (err instanceof LoginError) {
+                        throw err;
+                    }
+                    else {
+                        let errMsg = err && err.message ? err.message : '';
+                        throw new UMSError(this.brandid, errMsg);
+                    }
                 });
 
                 let getUid = () => {
@@ -56,9 +62,6 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
                 };
 
                 this.sp.on('ws::connect', () => {
-                    // in case of error close and re-create
-                    //subscribeExConversations()
-                    let getUserProfileReq
                     getUid().then(userId => {
 
                         let subscribeExReq = new SubscribeExConversations({
@@ -112,28 +115,8 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
     }
 
     sendText(convId, message, composeTimeout) { // text, hosted file, external-link
-        //let sp = this.sp;
-        //let composeEventReq = new ComposeEvent({convId: convId});
-        //return this.sp.send(composeEventReq.getType(), composeEventReq.getRequest()).then(() => {
-        //    let tmo = composeTimeout ? composeTimeout : 2000;
-        //    setTimeout(() => {
-        //        let activeEventReq = new ActiveEvent({convId: convId});
-        //        return sp.send(activeEventReq.getType(), activeEventReq.getRequest()).then(() => {
-        //            let publishEventReq = new PublishEvent({convId: convId, message: message});
-        //            return sp.send(publishEventReq.getType(), publishEventReq.getRequest());
-        //        });
-        //    }, tmo);
-        //});
         let publishEventReq = new PublishEvent({convId: convId, message: message});
         return this.sp.send(publishEventReq.getType(), publishEventReq.getRequest());
-    }
-
-    sendFile() {
-
-    }
-
-    sendLinkFile() {
-
     }
 
     resolveConversation(convId) {
@@ -147,36 +130,33 @@ class AgentSDK extends EventEmitter { // todo monitor the socket,
     }
 
 
-    // TBD - START
-    resumeConversation() {
+    // TBC - START
+    sendFile() {
+    }
 
+    sendLinkFile() {
+    }
+
+
+    resumeConversation() {
     }
 
     msgAcceptStatus() {
 
     }
 
-    //updateTTR() {
-    //
-    //}
-
     backToQueue() {
-
     }
 
     setAgentState() {
-
     }
 
-
     generateURLForUploadFile() {
-
     }
 
     generateURLForDownloadFile() {
-
     }
-    // TBD - END
+    // TBC - END
 
 }
 

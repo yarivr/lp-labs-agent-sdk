@@ -1,5 +1,5 @@
 {
-  "name": "agent-sdk",
+  "name": "labs-agent-sdk",
   "version": "1.0.0",
   "description": "Agent SDK",
   "main": "index.js",
@@ -7,11 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "merge": "^1.2.0",
-    "body-parser": "^1.13.1",
-    "cookie-parser": "^1.3.5",
-    "express": "^4.14.0",
-    "express-ws": "^2.0.0-rc.1",
     "form-data": ">=1.0.0-rc4",
     "lodash": "^4.13.1",
     "promise.prototype.finally": "1.0.1",
@@ -28,6 +23,20 @@
     "sdk",
     "agent"
   ],
-  "author": "Yariv Rosenbach",
-  "license": "ISC"
+  "author": {
+    "name": "Yariv Rosenbach",
+    "email": "yarivr@liveperson.com",
+    "url": "https://www.linkedin.com/in/yariv-rosenbach-83b1174/"
+  },
+  "licenses": [
+    {
+      "type": "LP",
+      "url": ""
+    }
+  ],
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2",
+    "sinon": "^1.17.6"
+  }
 }

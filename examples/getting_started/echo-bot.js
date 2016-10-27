@@ -3,14 +3,15 @@
  */
 "use strict";
 
-let config = require('../conf/config');
 let AgentSDK = require('../index');
+let BRANDID = "BRANDID"; // LiveEngage accountid
+let USERNAME = "BOT LE LOGIN NAME"; // LiveEngage agent's login name
+let PASSWORD = "BOT LE PASSWORD"; // LiveEngage agent's password
+let LAST_EVENT_TIMESTAMP = Date.now(); // The time stamp from which LiveEngage events should be fetched
+let TRANSFER_SKILL_ID = -1 // Should be skill id (integer number) which the Bot should transfer a conversation to. -1 is equal to any skill
 
-/*let as = new AgentSDK('qa6573138', 'bot@liveperson.com', '12345678', Date.now(), 'wss://qatrunk.dev.lprnd.net',
- 'https://hc1.dev.lprnd.net/hc/s-qa6573138/web/m-LP/mlogin/home.jsp', 'https://qtvr-wap08.dev.lprnd.net/le/account/qa6573138/session');*/
-let as = new AgentSDK('qa6573138', 'bot@liveperson.com', '12345678', Date.now());
+let as = new AgentSDK(BRANDID, USERNAME, PASSWORD, Date.now());
 as.on('consumer::ring', data => {
-    console.log(">>>CONSUMER Ringing: ", data);
     as.acceptRing(data.ringId).then(() => {
         console.log(">>> ring accepted");
         as.getUserProfile(data.consumerId).then(
@@ -18,16 +19,13 @@ as.on('consumer::ring', data => {
     }).catch((err) => {
         console.log(err.message);
     });
-
-    /*    as.getUserProfile(data.consumerId).then(
-     data => { console.log(">>>Consumer Profile: ", data); })});*/
 });
 
 as.on('consumer::contentEvent', data => {
     console.log(">>>GOT Message from consumer: ", data);
     console.log(">>>Echo to consumer");
     if (data.message.indexOf('transfer') == 0) {
-        as.transferToSkill(data.convId, 3617806910);
+        as.transferToSkill(data.convId, TRANSFER_SKILL_ID);
     }
     else {
         as.sendText(data.convId, "[echo]: " + data.message);

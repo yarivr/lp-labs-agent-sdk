@@ -1,9 +1,10 @@
 {
   "login": {
-    "leLoginTimeout": 5
+    "leLoginTimeout": 10
   },
   "csds": {
     "prodDomain": "adminlogin.liveperson.net",
-    "devDomain": "192.168.21.129"
+    "devDomain": "192.168.21.129",
+    "ttl": 18000000
   }
 }
