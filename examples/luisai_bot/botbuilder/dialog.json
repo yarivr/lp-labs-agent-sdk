@@ -1,0 +1,35 @@
+{
+  "key": "@@BOT LIVEENGAGE USERNAME@@",
+  "secret": "@@BOT LIVEENGAGE PASSWORD@@",
+  "recognizer": {
+    "type": "louisai",
+    "settings": {
+      "id": "@@LUISAI APP ID@@",
+      "key": "@@LUISAI KEY@@"
+    }
+  },
+  "static_model": {
+    "intents": {
+      "ccp": {
+        "actions": [
+          {
+            "action": "sendText",
+            "val": "Transferring you to an expert agent right away..."
+          },
+          {
+            "action": "transferToSkill",
+            "val": "@@INTEGER SKILLID@@"
+          }
+        ]
+      },
+      "resolve": {
+        "actions": [
+          {
+            "action": "resolveConversation",
+            "val": ""
+          }
+        ]
+      }
+    }
+  }
+}
