@@ -154,7 +154,7 @@ Return (Promise) Value:
 
     Empty Promise    
     
-# Exceptions
+# Error events
 ### Login
 Bot (LiveEngage agent) Login failure 
 

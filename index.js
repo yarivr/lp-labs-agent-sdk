@@ -41,11 +41,11 @@ class AgentSDK extends EventEmitter { // throws Error, UMSError, LoginError
 
                 this.sp.on('error', err => {
                     if (err instanceof LoginError) {
-                        throw err;
+                        this.emit('error', err);
                     }
                     else {
                         let errMsg = err && err.message ? err.message : '';
-                        throw new UMSError(this.brandid, errMsg);
+                        this.emit('error', new UMSError(this.brandid, errMsg));
                     }
                 });
 

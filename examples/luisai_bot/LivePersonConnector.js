@@ -3,12 +3,11 @@
  */
 "use strict";
 
-var AgentSDK = require('../index');
+var AgentSDK = require('../../index');
 var mb = require('botbuilder').Message;
 var async = require('async');
 let Handlebars = require('handlebars');
-let db = require('../db-manager');
-let log = require('../Log');
+let log = require('winston');
 
 var LivePersonConnector = (function () {
     function LivePersonConnector(settings) {
@@ -21,6 +20,10 @@ var LivePersonConnector = (function () {
         this.as = new AgentSDK(this.brandid, this.key, this.secret, this.timestamp);
         this.profiles = {};
         this.acceptCB = settings.acceptCB;
+
+        this.as.on('error', function(e) {
+           log.error(e.message);
+        });
 
         this.as.on('consumer::ring', function (data) {
             var consumerId = data.consumerId;

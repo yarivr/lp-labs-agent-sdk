@@ -6,15 +6,13 @@
 var merge = require('merge');
 let _ = require('lodash');
 let Handlebars = require('handlebars');
-let fs = require('fs');
-let db = require('../db-manager');
 let recognizerFactory = require('./recognizer-factory');
 let builder = require('botbuilder');
 let LivePersonConnector = require('./LivePersonConnector');
 let log = require('winston');
 
-let staticDialog = require('./dialog.json');
-let dynamicDialog = './dialog.js';
+let staticDialog = require('./botbuilder/dialog.json');
+let dynamicDialog = './botbuilder/dialog.js';
 
 
 class BotManager  {
