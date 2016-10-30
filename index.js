@@ -114,7 +114,7 @@ class AgentSDK extends EventEmitter { // throws Error, UMSError, LoginError
         return this.sp.send(activeEventReq.getType(), activeEventReq.getRequest());
     }
 
-    sendText(convId, message, composeTimeout) { // text, hosted file, external-link
+    sendText(convId, message) { // text, hosted file, external-link
         let publishEventReq = new PublishEvent({convId: convId, message: message});
         return this.sp.send(publishEventReq.getType(), publishEventReq.getRequest());
     }

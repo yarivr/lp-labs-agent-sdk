@@ -31,7 +31,7 @@ The sdk is divided to asynchronous events and prmoised based API .<br/>
      let as = new AgentSDK(brandid, username, password, timestamp);
 
 
-# Events/Messages (more to come soon)
+# Consumer (to agent) Events/Messages (more to come soon)
 ### consumer::ring
 Consumer is requesting for a conversation
 
@@ -70,8 +70,10 @@ Sample Data:
     }
 
 
-# Methods (Promise based, more to come soon)
+# Agent APIs Methods (Promise based, more to come soon)
 ### acceptRing
+Accept a consumer request for a conversation
+
 Parameters:
 
         ringId 
@@ -80,9 +82,84 @@ Return (Promise) Value:
 
     Empty Promise
 
-### getUserProfile(userId)
+### getUserProfile
+Get the profile of a consumer
 
+Parameters:
+
+    userId
+
+Return (Promise) Value:
+    
+    {
+        "firstName":"user1",
+        "lastName":"last1",
+        "userId":"63d22d42-354c-44b2-b351-3f4e6454c3ef",
+        "avatarUrl":"avatarUrl",
+        "role":null,
+        "backgndImgUri":"backgndImgUri",
+        "description":"auto description",
+        "privateData":{
+            "mobileNum":"0",
+            "mail":"",
+            "pushNotificationData":{
+            "serviceName":"",
+            "certName":"",
+            "token":""
+        }
+    }
+    
+### compose
+Send a compose notification
+
+Parameters:
+
+    convId
+    
+Return (Promise) Value:
+
+    Empty Promise
+        
+### active
+Send an online notification
+
+Parameters:
+
+    convId
+    
+Return (Promise) Value:
+
+    Empty Promise
+     
+### sendText
+Send text message
+    
+Parameters:
+
+    convId
+    message
+           
+Return (Promise) Value:
+
+    Empty Promise           
+  
+### resolveConversation
+Resolve (close) conversation
+ 
+Parameters:
+
+    convId 
+    
+Return (Promise) Value:
+
+    Empty Promise    
+    
 # Exceptions
+### Login
+Bot (LiveEngage agent) Login failure 
+
+### UMS
+A UMS API or network error 
 
 # Support
 yarivr@liveperson.com
