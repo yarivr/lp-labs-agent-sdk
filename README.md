@@ -169,6 +169,11 @@ Under the directory examples/luisai_bot, there is more advanced example of a bit
 
 In the file README.md you will find a useful information for running this example.
 
+# Important issues
+1. It's important to register to the sdk errors.
+2. A LoginError is triggered in case that the bot failed to login to LiveEngage.
+   In case that the LoginError is due to "password expired", a new password should
+   be set in LiveEngage and used while initiating an agent-sdk instance.
 
 # Support
 yarivr@liveperson.com
