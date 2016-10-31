@@ -73,10 +73,8 @@ class BotManager  {
             timestamp: Date.now(),
             intentMap: account.static_model,
             acceptCB: function(data) {
-                db.getBot(data.brandId).then(function(bot) {
-                    let skillId = data.skillId;
-                    handleAccept(bot, data);
-                });
+                let conf = staticDialog;
+                handleAccept(conf, data);
             }
         });
 

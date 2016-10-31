@@ -29,20 +29,16 @@ var LivePersonConnector = (function () {
             var consumerId = data.consumerId;
             var convId = data.convId;
             var skillId = data.skillId;
-            console.log(">>>CONSUMER Ringing: ", data);
             log.debug(">>>CONSUMER Ringing: " +  JSON.stringify(data));
 
             if(data.ringState !== 'WAITING') {
-                console.log(">>>CONSUMER Ringing is not WAITING, ignoring");
                 log.debug(">>>CONSUMER Ringing is not WAITING, ignoring");
                 return;
             }
 
             _this.as.acceptRing(data.ringId).then(function () {
-                console.log(">>> ring accepted");
                 log.debug(">>> ring accepted");
                 _this.as.getUserProfile(data.consumerId).then(function (data) {
-                    console.log(">>>Consumer Profile: ", data);
                     log.debug(">>>Consumer Profile: " + JSON.stringify(data));
                     data['skillId'] = skillId;
                     _this.profiles[data.userId] = data;
@@ -56,13 +52,10 @@ var LivePersonConnector = (function () {
                 });
             }).catch(function (err) {
                 log.debug(err.message);
-                console.log(err.message);
             });
         });
 
         this.as.on('consumer::contentEvent', function(data) {
-            //var _this = this;
-            console.log(">>>GOT Message from consumer: ", data);
             log.debug("GOT Message from consumer (brandid, jparams): " + '(' + _this.brandid + ', ' + JSON.stringify(data) + ')');
             if (data.message.indexOf('transfer') == 0) {
                 if (_this.transferSkill)
