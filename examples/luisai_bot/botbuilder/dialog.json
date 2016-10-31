@@ -1,12 +1,12 @@
 {
-  "brandid": "qa6573138",
-  "key": "bot@liveperson.com",
-  "secret": "ZeroPlease",
+  "brandid": "@@LIVEENGAGE_ACCOUNTID@@",
+  "key": "@@LIVEENGAGE_AGENT_BOT_USERNAME@@",
+  "secret": "@@LIVEENGAGE_AGENT_BOT_PASSWORD@@",
   "recognizer": {
     "type": "louisai",
     "settings": {
-      "id": "bcffb996-a2b8-486d-8d73-44f9def3b355",
-      "key": "6cef7864a4d0465ba3ac6abc1fae7a67"
+      "id": "@@LUISAI_APPID@@",
+      "key": "@@LUISAI_APPKEY@@"
     }
   },
   "static_model": {
@@ -19,7 +19,7 @@
           },
           {
             "action": "transferToSkill",
-            "val": "@@INTEGER SKILLID@@"
+            "val": @@INTEGER SKILLID@@
           }
         ]
       },

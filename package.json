@@ -1,5 +1,5 @@
 {
-  "name": "labs-agent-sdk",
+  "name": "agent-sdk",
   "version": "1.0.0",
   "description": "Agent SDK",
   "main": "index.js",

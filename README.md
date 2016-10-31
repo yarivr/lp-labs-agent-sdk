@@ -1,10 +1,10 @@
-labs-agent-sdk
-============
+agent-sdk
+=========
 Easily create LiveEngage messaging Bot 
 
 Quick Start
 -----------
-npm install labs-agent-sdk --save
+npm install agent-sdk --save
 
 1. Edit a copy of the example examples/getting_started/echo-bot.js
 2. Set BRANDID with your LiveEngage account id
@@ -160,6 +160,15 @@ Bot (LiveEngage agent) Login failure
 
 ### UMS
 A UMS API or network error 
+
+
+# More Advanced Bot Example
+Under the directory examples/luisai_bot, there is more advanced example of a bit based on Microsoft's:
+1. botbuilder framework 
+2. Luis AI
+
+In the file README.md you will find a useful information for running this example.
+
 
 # Support
 yarivr@liveperson.com
