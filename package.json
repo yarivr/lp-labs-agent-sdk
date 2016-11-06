@@ -1,7 +1,7 @@
 {
-  "name": "agent-sdk",
+  "name": "lp-labs-agent-sdk",
   "version": "1.0.0",
-  "description": "Agent SDK",
+  "description": "LiveEngage Agent SDK",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://lpgithub.dev.lprnd.net/labs/agent-sdk"
+    "url": "https://github.com/yarivr/lp-labs-agent-sdk"
   },
   "keywords": [
     "bot",
@@ -30,8 +30,8 @@
   },
   "licenses": [
     {
-      "type": "LP",
-      "url": ""
+      "type": "MIT",
+      "url": "https://github.com/yarivr/lp-labs-agent-sdk/LICENSE.md"
     }
   ],
   "devDependencies": {

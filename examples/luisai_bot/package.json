@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://lpgithub.dev.lprnd.net/labs/agent-sdk/tree/master/examples/luisai_bot"
+    "url": "https://github.com/yarivr/lp-labs-agent-sdk/tree/master/examples/luisai_bot"
   },
   "keywords": [
     "bot",
@@ -25,5 +25,5 @@
     "bitbuilder"
   ],
   "author": "Yariv Rosenbach",
-  "license": "Liveperson"
+  "license": "MIT"
 }
