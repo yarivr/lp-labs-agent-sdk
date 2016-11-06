@@ -1,5 +1,5 @@
-agent-sdk
-=========
+lp-labs-agent-sdk
+=================
 Easily create LiveEngage messaging Bot 
 
 Quick Start
