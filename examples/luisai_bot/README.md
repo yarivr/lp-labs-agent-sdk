@@ -20,7 +20,7 @@
    2) send as consumer a greeting term
    3) Bot responds with: "Hi, What is your favorate color?"
    4) Send as consumer a color name
-   5) 
+   5) Bot responds with: "Got it, good bye"
    
 ### Next steps
    1) Learn the botbuilder documentation:
@@ -31,7 +31,7 @@
       and dynamic configurations of the bot logic.
    4) change the bot to have a more sophisticated logic   
     
-#### For Questions, comments
+#### For Questions, comments, bugs report
 mail to: yarivr@liveperson.com
       
    

@@ -1,6 +1,7 @@
 lp-labs-agent-sdk
 =================
-Easily create LiveEngage messaging Bot 
+Easily create LiveEngage messaging Bot.
+This is initial version which will be extended soon. 
 
 Quick Start
 -----------
