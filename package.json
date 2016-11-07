@@ -21,7 +21,9 @@
     "bot",
     "ums",
     "sdk",
-    "agent"
+    "agent",
+    "liveperson",
+    "liveengage"
   ],
   "author": {
     "name": "Yariv Rosenbach",
@@ -31,12 +33,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/yarivr/lp-labs-agent-sdk/LICENSE.md"
+      "url": "https://github.com/yarivr/lp-labs-agent-sdk/blob/master/LICENSE.md"
     }
-  ],
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.1.2",
-    "sinon": "^1.17.6"
-  }
+  ]
 }

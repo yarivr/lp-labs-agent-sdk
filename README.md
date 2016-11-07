@@ -1,7 +1,7 @@
 lp-labs-agent-sdk
 =================
 Easily create LiveEngage messaging Bot.
-This is initial version which will be extended soon. 
+This is an initial version which will be extended soon. 
 
 Quick Start
 -----------
@@ -164,7 +164,7 @@ A UMS API or network error
 
 
 # More Advanced Bot Example
-Under the directory examples/luisai_bot, there is more advanced example of a bit based on Microsoft's:
+Under the directory examples/luisai_bot, there is more advanced example based on Microsoft's:
 1. botbuilder framework 
 2. Luis AI
 
