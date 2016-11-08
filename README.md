@@ -40,7 +40,7 @@ Sample Data:
 
     {
             "ringId": "WAITING",
-            "ringState": amsMsg.body.ringState,
+            "ringState": "646f0078-bb1f-4faf-8353-15be257e4f8f",
             "convId": "684fdcb0-bbf5-44ad-a39d-fcae7919d959",
             "consumerId: "98097e05-f4ab-48be-b0ee-c116edcb6f69",
             "skillId": "736937610"
