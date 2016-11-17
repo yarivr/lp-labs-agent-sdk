@@ -19,6 +19,7 @@ let AcceptRing = require('./lib/ams/v2/AcceptRing');
 let PublishEvent = require('./lib/ams/v2/PublishEvent');
 let TransferToSkill = require('./lib/ams/v2/TransferToSkill');
 let ResolveConversation = require('./lib/ams/v2/ResolveConversation');
+let QueryMessages = require('./lib/ams/v2/QueryMessages');
 let ComposeEvent = require('./lib/ams/v2/ComposeEvent');
 let ActiveEvent = require('./lib/ams/v2/ActiveEvent');
 let amsEmit =  require('./lib/ams/ams-emit');
@@ -105,6 +106,15 @@ class AgentSDK extends EventEmitter { // throws Error, UMSError, LoginError
     getUserProfile(userId) {
         let userProfileReq = new GetUserProfile({ userId: userId });
         return this.sp.send(userProfileReq.getType(), userProfileReq.getRequest());
+    }
+    queryMessages(convId, maxQuantity, olderThanSequence, newerThanSequence) {
+        let queryMessages = new QueryMessages({
+            "conversationId": convId,
+            "maxQuantity": maxQuantity,
+            "olderThanSequence": olderThanSequence,
+            "newerThanSequence": newerThanSequence
+        });
+        return this.sp.send(queryMessages.getType(), queryMessages.getRequest());
     }
 
     compose(convId) {
