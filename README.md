@@ -8,7 +8,7 @@ Quick Start
 npm install agent-sdk --save
 
 1. Edit a copy of the example examples/getting_started/echo-bot.js
-2. Create a LiveEngage account with messaging enabled.
+2. Create a LiveEngage account with <b/> messaging enabled.
 3. Set BRANDID with your LiveEngage account id
 4. Set USERNAME with an agent name associated with your BOT.
 5. Set PASSWORD as the password of the agent associated with your BOT.
