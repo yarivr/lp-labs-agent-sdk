@@ -176,6 +176,8 @@ In the file README.md you will find a useful information for running this exampl
 2. A LoginError is triggered in case that the bot failed to login to LiveEngage.
    In case that the LoginError is due to "password expired", a new password should
    be set in LiveEngage and used while initiating an agent-sdk instance.
+3. In order to use transferToSkill methods a valid skill id should be used.  
+   The list of skill ids can be obtained by a csv export inside the LiveEngage console (users->skills) 
 
 # Support
 yarivr@liveperson.com
