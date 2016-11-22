@@ -8,7 +8,7 @@ Quick Start
 npm install agent-sdk --save
 
 1. Edit a copy of the example examples/getting_started/echo-bot.js
-2. Create a LiveEngage account with <b/> messaging enabled.
+2. Create a LiveEngage account with **messaging enabled**.
 3. Set BRANDID with your LiveEngage account id
 4. Set USERNAME with an agent name associated with your BOT.
 5. Set PASSWORD as the password of the agent associated with your BOT.
@@ -40,7 +40,7 @@ Consumer is requesting for a conversation
 Sample Data:
 
     {
-            "ringId": "WAITING",
+            "ringId": "1f306a8d-bc48-4d3d-8e74-f778c5588de9_9b9d4251-b748-3475-bcc0-26a18cfd834d",
             "ringState": "646f0078-bb1f-4faf-8353-15be257e4f8f",
             "convId": "684fdcb0-bbf5-44ad-a39d-fcae7919d959",
             "consumerId: "98097e05-f4ab-48be-b0ee-c116edcb6f69",
@@ -176,7 +176,7 @@ In the file README.md you will find a useful information for running this exampl
 2. A LoginError is triggered in case that the bot failed to login to LiveEngage.
    In case that the LoginError is due to "password expired", a new password should
    be set in LiveEngage and used while initiating an agent-sdk instance.
-3. In order to use transferToSkill methods a valid skill id should be used.  
+3. In order to use transferToSkill method a valid skill id should be used.  
    The list of skill ids can be obtained by a csv export inside the LiveEngage console (users->skills) 
 
 # Support
