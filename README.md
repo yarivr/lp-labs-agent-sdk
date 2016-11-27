@@ -47,6 +47,21 @@ Sample Data:
             "skillId": "736937610"
     }
 
+### consumer::firstContentEvent
+Consumer message sent before the bot accepted the conversation  
+
+Sample Data:
+    
+    {
+            "convId": "684fdcb0-bbf5-44ad-a39d-fcae7919d959",
+            "sequence":0,
+            "consumerId": "98097e05-f4ab-48be-b0ee-c116edcb6f69",
+            "serverTimestamp": 1438499478874,
+            "type": "ContentEvent",
+            "message": "Hi there!!!",
+            "contentType": "text/plain"
+    }
+
 ### consumer::contentEvent
 Consumer message 
 
