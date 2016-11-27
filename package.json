@@ -1,6 +1,6 @@
 {
   "name": "lp-labs-agent-sdk",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "LiveEngage Agent SDK",
   "main": "index.js",
   "scripts": {
