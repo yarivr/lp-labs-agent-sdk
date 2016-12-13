@@ -14,6 +14,7 @@ let config = require('./conf/conf.json');
 let lpCSDS = require('./lib/lp-csds');
 let SocketProtocol = require('./lib/ams/socket-protocol');
 let GetUserProfile = require('./lib/ams/v2/GetUserProfile');
+let GetClock = require('./lib/ams/v2/GetClock');
 let SubscribeExConversations = require('./lib/ams/v2/SubscribeExConversations');
 let AcceptRing = require('./lib/ams/v2/AcceptRing');
 let PublishEvent = require('./lib/ams/v2/PublishEvent');
@@ -90,6 +91,9 @@ class AgentSDK extends EventEmitter { // throws Error, UMSError, LoginError
             };
 
             createSocket();
+        }, (err) => {
+            //console.log("Error getting csds data");
+            this.emit("error", err);
         });
     }
 
@@ -106,6 +110,10 @@ class AgentSDK extends EventEmitter { // throws Error, UMSError, LoginError
     getUserProfile(userId) {
         let userProfileReq = new GetUserProfile({ userId: userId });
         return this.sp.send(userProfileReq.getType(), userProfileReq.getRequest());
+    }
+    verifyConnection() {
+        let getClock = new GetClock();
+        return this.sp.send(getClock.getType(), getClock.getRequest());
     }
     queryMessages(convId, maxQuantity, olderThanSequence, newerThanSequence) {
         let queryMessages = new QueryMessages({
