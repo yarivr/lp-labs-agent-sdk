@@ -82,7 +82,6 @@ class AgentSDK extends EventEmitter { // throws Error, UMSError, LoginError
                          Consumer -> Agent
                          */
                         this.sp.on('ams::data', data => { // consumer::ring, consumer::msg, consumer::accept, consumer::seen, consumer::compose, consumer::close
-                            console.log(">>>GOT From AMS: ", data);
                             amsEmit(data, this);
                         });
 
