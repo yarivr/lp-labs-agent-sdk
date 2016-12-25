@@ -6,7 +6,7 @@
  */
 "use strict";
 
-let AgentSDK = require('../index');
+let AgentSDK = require('../../index');
 let BRANDID = "BRANDID"; // LiveEngage accountid
 let USERNAME = "BOT LE LOGIN NAME"; // LiveEngage agent's login name
 let PASSWORD = "BOT LE PASSWORD"; // LiveEngage agent's password
