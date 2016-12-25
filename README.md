@@ -170,6 +170,21 @@ Parameters:
 Return (Promise) Value:
 
     Empty Promise    
+
+### transferToSkill
+Transfer conversation to a different skill.
+The target skill is associated with another agent (human or bot).
+Please read #3 in the **'Important issues'** section regarding skillId.
+ 
+Parameters:
+
+    convId 
+    skillId
+    
+Return (Promise) Value:
+
+    Empty Promise    
+
     
 # Error events
 ### Login
