@@ -24,6 +24,10 @@ as.on('consumer::ring', data => {
     });
 });
 
+as.on('error', err => {
+	console.log(err.message);
+});
+
 as.on('consumer::contentEvent', data => {
     console.log(">>>GOT Message from consumer: ", data);
     console.log(">>>Echo to consumer");
